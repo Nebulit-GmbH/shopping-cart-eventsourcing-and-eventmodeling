@@ -1,6 +1,7 @@
 package de.nebulit.viewcart.internal
 
 import de.nebulit.common.DelegatingCommandHandler
+import de.nebulit.common.DelegatingQueryHandler
 import de.nebulit.viewcart.internal.CartItemsReadModel
 import de.nebulit.common.persistence.EventsEntityRepository
 import de.nebulit.common.ReadModel
@@ -14,15 +15,17 @@ import mu.KotlinLogging
 
 
 @RestController
-class ViewcartRessource(private var repository: EventsEntityRepository) {
+class ViewcartRessource(
+    private var repository: EventsEntityRepository,
+    private var delegatingQueryHandler: DelegatingQueryHandler) {
 
     var logger = KotlinLogging.logger {}
 
     @GetMapping("/viewcart")
     fun findInformation(@RequestParam aggregateId:UUID):ReadModel<CartItemsReadModel> {
-        return CartItemsReadModel().applyEvents(repository.findByAggregateId(aggregateId))
-        
+        return delegatingQueryHandler.handleQuery<UUID, CartItemsReadModel>(CartItemsReadModelQuery(aggregateId))
+
     }
-      
+
 
 }

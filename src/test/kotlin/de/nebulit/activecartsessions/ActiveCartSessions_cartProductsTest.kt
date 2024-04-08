@@ -2,31 +2,26 @@ package de.nebulit.activecartsessions
 
 import de.nebulit.ContainerConfiguration
 import de.nebulit.activecartsessions.internal.ActiveCartSession
-import de.nebulit.common.CommandException
 
 import de.nebulit.common.DelegatingCommandHandler
 import de.nebulit.common.persistence.EventsEntityRepository
 import de.nebulit.support.CartAggregateRepository
 
 import de.nebulit.events.CarttemAddedEvent;
-import de.nebulit.activecartsessions.internal.CartProductsReadModel
-import de.nebulit.activecartsessions.internal.CartProductsReadModelQuery
+import de.nebulit.activecartsessions.internal.ActiveCartProductsWithProductsReadModel
+import de.nebulit.activecartsessions.internal.ActiveCartProductsWithProductsReadModelQuery
 import de.nebulit.activecartsessions.internal.CartSessionRepository
 import de.nebulit.common.DelegatingQueryHandler
 import java.util.UUID
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Assertions
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Import
 import de.nebulit.common.support.RandomData
-import de.nebulit.events.CartSessionStartedEvent
-import org.assertj.core.api.Assertions.assertThat
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.modulith.test.ApplicationModuleTest
 import org.springframework.modulith.test.Scenario
-import java.util.*
 
 @ApplicationModuleTest(mode = ApplicationModuleTest.BootstrapMode.DIRECT_DEPENDENCIES)
 @Import(ContainerConfiguration::class)
@@ -82,9 +77,9 @@ class ActiveCartSessions_cartProductsTest {
         })
 
         whenResult.andWaitForStateChange {
-            var readModel:CartProductsReadModel =
-                delegatingQueryHandler.handleQuery(CartProductsReadModelQuery(listOf(productId)))
-            readModel.data.contains(AGGREGATE_ID)
+            var readModel: ActiveCartProductsWithProductsReadModel =
+                delegatingQueryHandler.handleQuery(ActiveCartProductsWithProductsReadModelQuery(productId))
+            readModel.cartIds.contains(AGGREGATE_ID)
         }
 
         //THEN
