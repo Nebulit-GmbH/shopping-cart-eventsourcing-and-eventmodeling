@@ -11,7 +11,7 @@ import java.time.LocalDate
 import java.util.*
 import kotlin.jvm.Transient
 
-data class CartItem(var productName:String,var price:Double,var quantity:String,var productimage:String,var productId:UUID)
+data class CartItem(var productName:String,var price:Double,var quantity:Int,var productimage:String,var productId:UUID)
 
 @Entity
 @Table(name = "aggregates")

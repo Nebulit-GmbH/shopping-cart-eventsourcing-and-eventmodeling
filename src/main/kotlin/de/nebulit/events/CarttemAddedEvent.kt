@@ -5,4 +5,4 @@ import java.util.UUID
 import mu.KotlinLogging
 
 
-data class CarttemAddedEvent(var productName:String,var price:Double,var quantity:String,var productimage:String,var aggregateId:UUID,var cartItemId:UUID,var productId:UUID) : Event
+data class CarttemAddedEvent(var productName:String,var price:Double,var quantity:Int,var productimage:String,var aggregateId:UUID,var cartItemId:UUID,var productId:UUID) : Event

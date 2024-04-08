@@ -15,11 +15,11 @@ class AdditemRessource(private var commandHandler: DelegatingCommandHandler) {
 
     var logger = KotlinLogging.logger {}
 
-    
+
     @PostMapping("additem")
-    fun processCommand(@RequestParam productName:String,@RequestParam price:Double,@RequestParam aggregateId:UUID,@RequestParam quantity:String,@RequestParam productimage:String,@RequestParam productId:UUID) {
+    fun processCommand(@RequestParam productName:String,@RequestParam price:Double,@RequestParam aggregateId:UUID,@RequestParam quantity:Int,@RequestParam productimage:String,@RequestParam productId:UUID) {
         commandHandler.handle(AddItemCommand(productName,price,aggregateId,quantity,productimage,productId))
     }
-    
+
 
 }
