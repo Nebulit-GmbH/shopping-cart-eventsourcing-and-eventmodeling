@@ -3,23 +3,13 @@ package de.nebulit.domain
 import de.nebulit.common.AggregateRoot
 import de.nebulit.common.CommandException
 import de.nebulit.common.persistence.InternalEvent
-import de.nebulit.events.CartClearedEvent
-import de.nebulit.events.CartItemRemovedEvent
-import de.nebulit.events.CartSessionStartedEvent
-import de.nebulit.events.CarttemAddedEvent
+import de.nebulit.events.*
 import jakarta.persistence.*
 import org.hibernate.annotations.JdbcTypeCode
 import java.sql.Types
 import java.util.*
 import kotlin.jvm.Transient
 
-data class CartItem(
-    var productName: String,
-    var price: Double,
-    var quantity: Int,
-    var productimage: String,
-    var productId: UUID
-)
 
 @Entity
 @Table(name = "aggregates")
@@ -33,26 +23,23 @@ class CartAggregate(
     override var version: Long? = 0
 
     @Transient
-    private var cartItems = mutableListOf<UUID>()
+    private var cartItemIds = mutableListOf<UUID>()
 
     @Transient
     override var events: MutableList<InternalEvent> = mutableListOf()
 
+    @Transient
+    private var cartItems = CartItems()
+
+    @Transient
+    private var totalPrice = TotalPrice()
+
     override fun applyEvents(events: List<InternalEvent>): AggregateRoot {
-        events.forEach {
-            when (it.value) {
-                is CarttemAddedEvent -> cartItems.add((it.value as CarttemAddedEvent).cartItemId)
-                is CartItemRemovedEvent -> cartItems.remove((it.value as CartItemRemovedEvent).cartItemId)
-                is CartClearedEvent -> cartItems.clear()
-            }
-        }
+        cartItems.applyEvents(events)
+        totalPrice.applyEvents(events)
         return this
     }
 
-    private fun handleRemove(event: CartItemRemovedEvent) {
-
-
-    }
 
 
     fun newSession() {
@@ -79,7 +66,7 @@ class CartAggregate(
     }
 
     fun removeItem(cartItemId: UUID) {
-        if (!cartItems.contains(cartItemId)) {
+        if (!cartItems.cartItems.values.map(CartItem::cartItemId).contains(cartItemId)) {
             throw CommandException("item not present")
         }
         this.events.add(InternalEvent().apply {
@@ -97,6 +84,20 @@ class CartAggregate(
             this.aggregateId = this@CartAggregate.aggregateId
             this.value = CartClearedEvent(
                 this@CartAggregate.aggregateId,
+            )
+        })
+    }
+
+    fun submit() {
+        if (cartItems.cartItems.isEmpty()) {
+            throw CommandException("cannot submit empty cart")
+        }
+        events.add(InternalEvent().apply {
+            this.aggregateId = this@CartAggregate.aggregateId
+            this.value = CartSubmittedEvent(
+                aggregateId = this@CartAggregate.aggregateId,
+                totalPrice = totalPrice.totalPrice,
+                cartItems = cartItems.cartItems.values.toList()
             )
         })
     }
