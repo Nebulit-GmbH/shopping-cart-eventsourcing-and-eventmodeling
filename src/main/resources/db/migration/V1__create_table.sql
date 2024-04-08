@@ -42,3 +42,8 @@ CREATE TABLE cart_session_items
     product_id UUID NOT NULL
 
 );
+
+CREATE TABLE requestedproductrevocations_product_revocations(
+    cart_id UUID NOT NULL,
+    product_id UUID NOT NULL
+)
