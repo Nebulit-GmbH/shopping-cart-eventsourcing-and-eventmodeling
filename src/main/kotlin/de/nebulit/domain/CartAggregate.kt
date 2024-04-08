@@ -30,10 +30,7 @@ class CartAggregate(
     override var events: MutableList<InternalEvent> = mutableListOf()
 
     @Transient
-    private var cartItems = CartItems()
-
-    @Transient
-    private var totalPrice = TotalPrice()
+    var cartItems = CartItems()
 
     @Transient
     var cartItemIds: Set<UUID> = emptySet()
@@ -41,7 +38,6 @@ class CartAggregate(
     override fun applyEvents(events: List<InternalEvent>): AggregateRoot {
         cartItems.applyEvents(events)
         this.cartItemIds = cartItems.cartItems.keys
-        totalPrice.applyEvents(events)
         return this
     }
 
@@ -93,7 +89,7 @@ class CartAggregate(
         })
     }
 
-    fun submit() {
+    fun submit(totalPrice: Double) {
         if (cartItems.cartItems.isEmpty()) {
             throw CommandException("cannot submit empty cart")
         }
@@ -101,7 +97,7 @@ class CartAggregate(
             this.aggregateId = this@CartAggregate.aggregateId
             this.value = CartSubmittedEvent(
                 aggregateId = this@CartAggregate.aggregateId,
-                totalPrice = totalPrice.totalPrice,
+                totalPrice = totalPrice,
                 cartItems = cartItems.cartItems.values.toList()
             )
         })

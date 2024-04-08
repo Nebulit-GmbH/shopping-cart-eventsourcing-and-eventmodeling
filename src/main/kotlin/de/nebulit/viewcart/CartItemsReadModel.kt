@@ -7,7 +7,6 @@ import de.nebulit.common.QueryHandler
 import de.nebulit.common.ReadModel
 import de.nebulit.domain.CartAggregate
 import de.nebulit.common.persistence.InternalEvent
-import de.nebulit.domain.TotalPrice
 import de.nebulit.events.CartClearedEvent
 import de.nebulit.events.CartItemRemovedEvent
 import de.nebulit.events.CarttemAddedEvent
@@ -32,12 +31,11 @@ class CartItem(
     var productimage: String,
 )
 
-class CartItemsReadModel(private var cartItemsInCart: Set<UUID>) : ReadModel<CartItemsReadModel> {
+class CartItemsReadModel(private var cartItemsInCart: Set<UUID>, var totalPrice: Double) : ReadModel<CartItemsReadModel> {
 
     @JsonIgnore
     var logger = KotlinLogging.logger {}
     var cartItems = emptyMap<UUID, CartItem>()
-    var totalPrice: Double = 0.0
 
 
     override fun applyEvents(events: List<InternalEvent>): CartItemsReadModel {
@@ -60,7 +58,6 @@ class CartItemsReadModel(private var cartItemsInCart: Set<UUID>) : ReadModel<Car
 
             }
         }
-        this.totalPrice += TotalPrice().applyEvents(events).totalPrice
         this.cartItems = cartItems
         return this
     }

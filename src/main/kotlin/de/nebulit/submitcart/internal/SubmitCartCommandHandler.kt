@@ -6,6 +6,7 @@ import de.nebulit.common.persistence.InternalEvent
 import org.springframework.stereotype.Component
 import org.springframework.context.ApplicationEventPublisher
 import de.nebulit.domain.CartAggregate
+import de.nebulit.domain.PricingService
 import mu.KotlinLogging
 import org.springframework.transaction.annotation.Transactional
 
@@ -14,7 +15,8 @@ import org.springframework.transaction.annotation.Transactional
 class SubmitCartCommandCommandHandler(
     private var aggregateService: AggregateService<CartAggregate>,
     private var eventsEntityRepository: EventsEntityRepository,
-    private var applicationEventPublisher: ApplicationEventPublisher
+    private var applicationEventPublisher: ApplicationEventPublisher,
+    private var pricingService: PricingService
 ) : BaseCommandHandler<CartAggregate>(aggregateService) {
 
     var logger = KotlinLogging.logger {}
@@ -24,7 +26,8 @@ class SubmitCartCommandCommandHandler(
         assert(inputCommand is SubmitCartCommand)
         val command = inputCommand as SubmitCartCommand
         val aggregate = findAggregate(command.aggregateId)
-        aggregate.submit()
+        var totalPrice = pricingService.calculatePrice(inputCommand.aggregateId)
+        aggregate.submit(totalPrice)
         // TODO process logic
         aggregateService.persist(aggregate)
         aggregate.events.forEach {
