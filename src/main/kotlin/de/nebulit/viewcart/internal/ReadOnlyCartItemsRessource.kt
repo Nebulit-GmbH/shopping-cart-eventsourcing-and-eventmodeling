@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import java.util.UUID
 import mu.KotlinLogging
+import org.springframework.web.bind.annotation.CrossOrigin
 
 
 @RestController
@@ -22,6 +23,7 @@ class ViewcartRessource(
 
     var logger = KotlinLogging.logger {}
 
+    @CrossOrigin
     @GetMapping("/viewcart")
     fun findInformation(@RequestParam aggregateId:UUID):ReadModel<CartItemsReadModel> {
         return delegatingQueryHandler.handleQuery<UUID, CartItemsReadModel>(CartItemsReadModelQuery(aggregateId))

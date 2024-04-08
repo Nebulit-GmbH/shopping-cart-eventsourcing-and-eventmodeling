@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import java.util.UUID
 import mu.KotlinLogging
+import org.springframework.web.bind.annotation.CrossOrigin
 
 
 @RestController
@@ -15,11 +16,12 @@ class RevokeproductafterpricechangeRessource(private var commandHandler: Delegat
 
     var logger = KotlinLogging.logger {}
 
-    
+
+    @CrossOrigin
     @PostMapping("revokeproductafterpricechange")
     fun processCommand(@RequestParam aggregateId:UUID,@RequestParam productId:UUID) {
         commandHandler.handle(RevokeProductAfterPriceChangeCommand(aggregateId,productId))
     }
-    
+
 
 }

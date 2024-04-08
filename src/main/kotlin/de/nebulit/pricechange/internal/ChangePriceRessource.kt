@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController
 import mu.KotlinLogging
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.transaction.annotation.Transactional
+import org.springframework.web.bind.annotation.CrossOrigin
 import java.util.*
 
 
@@ -22,6 +23,7 @@ class PricechangeRessource(
     var logger = KotlinLogging.logger {}
 
 
+    @CrossOrigin
     @PostMapping("pricechange")
     fun processCommand(
         @RequestParam aggregateId: UUID,

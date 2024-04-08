@@ -10,6 +10,7 @@ import java.util.UUID
 import mu.KotlinLogging
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.transaction.annotation.Transactional
+import org.springframework.web.bind.annotation.CrossOrigin
 
 
 @RestController
@@ -21,6 +22,7 @@ class InventorychangeRessource(
     var logger = KotlinLogging.logger {}
 
 
+    @CrossOrigin
     @PostMapping("inventorychange")
     fun processCommand(@RequestParam aggregateId: UUID, @RequestParam quantity: Int, @RequestParam productId: UUID) {
         commandHandler.handle(ChangeInventoryCommand(aggregateId, quantity))
