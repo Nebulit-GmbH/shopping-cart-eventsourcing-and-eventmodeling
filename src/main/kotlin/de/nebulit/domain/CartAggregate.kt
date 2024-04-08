@@ -23,9 +23,6 @@ class CartAggregate(
     override var version: Long? = 0
 
     @Transient
-    private var cartItemIds = mutableListOf<UUID>()
-
-    @Transient
     override var events: MutableList<InternalEvent> = mutableListOf()
 
     @Transient

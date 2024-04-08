@@ -1,4 +1,4 @@
-package de.nebulit.inventorychange.internal
+package de.nebulit.pricechange.internal
 
 import de.nebulit.common.Processor
 import de.nebulit.common.DelegatingCommandHandler
@@ -6,8 +6,6 @@ import de.nebulit.common.persistence.EventsEntityRepository
 import org.springframework.modulith.events.ApplicationModuleListener
 import org.springframework.stereotype.Component
 import mu.KotlinLogging
-import org.springframework.context.event.EventListener
-import java.util.*
 
 
 @Component
@@ -20,8 +18,14 @@ class AutomationProcessor(
     var logger = KotlinLogging.logger {}
 
     @ApplicationModuleListener
-    fun onEvent(event: InventoryChangedEventExternal) {
-        commandHandler.handle(ChangeInventoryCommand(event.productId,event.quantity))
+    fun process(priceChanged: PriceChangedEventExternal) {
+        commandHandler.handle(
+            ChangePriceCommand(
+                priceChanged.aggregateId,
+                priceChanged.oldPrice,
+                priceChanged.newPrice
+            )
+        )
     }
 
 }

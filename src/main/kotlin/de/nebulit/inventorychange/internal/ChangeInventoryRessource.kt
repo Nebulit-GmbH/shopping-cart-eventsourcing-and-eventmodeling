@@ -29,7 +29,7 @@ class InventorychangeRessource(
     @PostMapping("externalInventoryChange")
     @Transactional
     fun processCommand(@RequestParam aggregateId: UUID, @RequestParam quantity: Int) {
-        applicationEventPublisher.publishEvent(InventoryChangedEventExternal(aggregateId, 5))
+        applicationEventPublisher.publishEvent(InventoryChangedEventExternal(aggregateId, quantity))
     }
 
 

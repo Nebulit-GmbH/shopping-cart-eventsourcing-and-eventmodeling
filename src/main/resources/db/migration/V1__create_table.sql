@@ -23,4 +23,10 @@ CREATE TABLE IF NOT EXISTS event_publication
   publication_date TIMESTAMP WITH TIME ZONE NOT NULL,
   completion_date  TIMESTAMP WITH TIME ZONE,
   PRIMARY KEY (id)
+);
+
+CREATE TABLE inventories
+(
+    inventory_id UUID NOT NULL,
+    inventory   int  not null
 )
