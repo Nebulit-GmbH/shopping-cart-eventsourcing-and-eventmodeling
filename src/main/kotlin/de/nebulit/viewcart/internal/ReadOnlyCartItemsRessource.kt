@@ -2,9 +2,10 @@ package de.nebulit.viewcart.internal
 
 import de.nebulit.common.DelegatingCommandHandler
 import de.nebulit.common.DelegatingQueryHandler
-import de.nebulit.viewcart.internal.CartItemsReadModel
 import de.nebulit.common.persistence.EventsEntityRepository
 import de.nebulit.common.ReadModel
+import de.nebulit.viewcart.CartItemsReadModel
+import de.nebulit.viewcart.CartItemsReadModelQuery
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.GetMapping
 

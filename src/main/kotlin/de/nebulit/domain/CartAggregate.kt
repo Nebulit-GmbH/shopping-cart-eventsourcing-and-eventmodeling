@@ -35,8 +35,12 @@ class CartAggregate(
     @Transient
     private var totalPrice = TotalPrice()
 
+    @Transient
+    var cartItemIds: Set<UUID> = emptySet()
+
     override fun applyEvents(events: List<InternalEvent>): AggregateRoot {
         cartItems.applyEvents(events)
+        this.cartItemIds = cartItems.cartItems.keys
         totalPrice.applyEvents(events)
         return this
     }

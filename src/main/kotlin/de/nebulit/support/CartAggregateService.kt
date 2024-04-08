@@ -30,7 +30,10 @@ class CartAggregateService(
     }
 
     override fun findByAggregateId(aggregateId: UUID): CartAggregate? {
-        return repository.findByAggregateId(aggregateId)
+        var events = findEventsByAggregateId(aggregateId)
+        var aggregate = repository.findByAggregateId(aggregateId)
+        aggregate?.applyEvents(events)
+        return aggregate
     }
 
     override fun findEventsByAggregateId(aggregateId: UUID): List<InternalEvent> {

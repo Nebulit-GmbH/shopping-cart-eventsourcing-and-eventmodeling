@@ -15,7 +15,6 @@ class CartItems : ReadModel<CartItems> {
     var logger = KotlinLogging.logger {}
     var cartItems = emptyMap<UUID, CartItem>()
 
-
     override fun applyEvents(events: List<InternalEvent>): CartItems {
         var cartItems = mutableMapOf<UUID, CartItem>()
         events.forEach {
@@ -42,7 +41,7 @@ class CartItems : ReadModel<CartItems> {
 
                 is ProductRevokedEvent -> {
                     cartItems =
-                        cartItems.filter { item -> item.value.productId !== (it.value as ProductRevokedEvent).productId }
+                        cartItems.filter { item -> item.value.productId != (it.value as ProductRevokedEvent).productId }
                             .toMutableMap()
                 }
             }

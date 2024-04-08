@@ -4,11 +4,11 @@ import de.nebulit.ContainerConfiguration
 import de.nebulit.common.CommandException
 
 import de.nebulit.common.DelegatingCommandHandler
+import de.nebulit.common.DelegatingQueryHandler
 import de.nebulit.common.persistence.EventsEntityRepository
 import de.nebulit.support.CartAggregateRepository
 
 import de.nebulit.events.CarttemAddedEvent;
-import de.nebulit.viewcart.internal.CartItemsReadModel
 import java.util.UUID
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.BeforeEach
@@ -30,7 +30,7 @@ class ViewCartTest {
     lateinit var repository: EventsEntityRepository
 
     @Autowired
-    lateinit var commandHandler: DelegatingCommandHandler
+    lateinit var queryHandler: DelegatingQueryHandler
 
     @Autowired
     lateinit var aggregateRepository: CartAggregateRepository
@@ -44,7 +44,7 @@ class ViewCartTest {
     }
 
     @Test
-    fun `ViewCartTest`(scenario: Scenario) {
+    fun ViewCartTest(scenario: Scenario) {
 
         //GIVEN
 
@@ -80,7 +80,7 @@ class ViewCartTest {
 
 
         //THEN
-        var readModel = CartItemsReadModel().applyEvents(repository.findByAggregateId(AGGREGATE_ID))
+        var readModel = queryHandler.handleQuery<UUID,CartItemsReadModel>(CartItemsReadModelQuery(AGGREGATE_ID))
         assertThat(readModel.totalPrice).isEqualTo(13.0)
         assertThat(readModel.cartItems).hasSize(2)
     }
