@@ -7,5 +7,3 @@ interface EventState<U>{
 }
 
 interface ReadModel<U>: EventState<U>
-
-interface ProcessorReadModel<U>: ReadModel<U>

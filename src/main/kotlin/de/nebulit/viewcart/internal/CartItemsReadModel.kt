@@ -1,14 +1,18 @@
 package de.nebulit.viewcart.internal
 
+import de.nebulit.common.AggregateService
+import de.nebulit.common.Query
+import de.nebulit.common.QueryHandler
 import de.nebulit.common.ReadModel
 import de.nebulit.common.persistence.InternalEvent
+import de.nebulit.domain.CartAggregate
 import de.nebulit.domain.TotalPrice
 import de.nebulit.events.CartClearedEvent
 import de.nebulit.events.CartItemRemovedEvent
 import de.nebulit.events.CarttemAddedEvent
-import java.util.*
 import java.util.UUID
 import mu.KotlinLogging
+import org.springframework.stereotype.Component
 
 class CartItem(
     var cartItemId: UUID,
@@ -17,6 +21,26 @@ class CartItem(
     var quantity: Int,
     var productimage: String,
 )
+
+class CartItemsReadModelQuery(var aggregateId: UUID):Query<UUID> {
+    override fun toParam(): UUID {
+        return aggregateId
+    }
+}
+
+@Component
+class CartItemsReadModelQueryHandler(var aggregateService: AggregateService<CartAggregate>) :
+    QueryHandler<UUID, CartItemsReadModel> {
+    override fun handleQuery(query: Query<UUID>): CartItemsReadModel {
+        return CartItemsReadModel().applyEvents(aggregateService.findEventsByAggregateId(query.toParam()))
+    }
+
+    override fun <T> canHandle(query: Query<T>): Boolean {
+        return query is CartItemsReadModelQuery
+    }
+
+}
+
 
 class CartItemsReadModel : ReadModel<CartItemsReadModel> {
 

@@ -29,4 +29,16 @@ CREATE TABLE inventories
 (
     inventory_id UUID NOT NULL,
     inventory   int  not null
-)
+);
+
+CREATE TABLE cart_sessions
+(
+    cart_id UUID NOT NULL
+);
+CREATE TABLE cart_session_items
+(
+    cart_id UUID NOT NULL,
+    cart_item_id UUID NOT NULL ,
+    product_id UUID NOT NULL
+
+);

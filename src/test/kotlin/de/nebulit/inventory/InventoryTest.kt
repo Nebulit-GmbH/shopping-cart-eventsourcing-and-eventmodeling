@@ -4,6 +4,7 @@ import de.nebulit.ContainerConfiguration
 import de.nebulit.common.CommandException
 
 import de.nebulit.common.DelegatingCommandHandler
+import de.nebulit.common.DelegatingQueryHandler
 import de.nebulit.common.persistence.EventsEntityRepository
 import de.nebulit.support.ProductInventoryAggregateRepository
 
@@ -20,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Import
 import de.nebulit.common.support.RandomData
 import de.nebulit.inventory.internal.InventoryRepository
+import de.nebulit.inventory.internal.ProductInventoryReadModelQuery
 import de.nebulit.inventorychange.internal.InventoryChangedEventExternal
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.modulith.test.ApplicationModuleTest
@@ -35,9 +37,6 @@ class InventoryTest {
     lateinit var repository: EventsEntityRepository
 
     @Autowired
-    private lateinit var applicationEventPublisher: ApplicationEventPublisher
-
-    @Autowired
     lateinit var commandHandler: DelegatingCommandHandler
 
     @Autowired
@@ -45,6 +44,9 @@ class InventoryTest {
 
     @Autowired
     lateinit var aggregateRepository: ProductInventoryAggregateRepository
+
+    @Autowired
+    lateinit var delegatingQueryHandler: DelegatingQueryHandler
 
     @BeforeEach
     fun setUp() {
@@ -94,8 +96,9 @@ class InventoryTest {
         var whenResult = scenario.publish(inventoryChangedEvent)
 
         whenResult.andWaitForStateChange {
-            var readModel =
-                     ProductInventoryReadModel(inventoryRepository).applyEvents(repository.findByAggregateId(AGGREGATE_ID))
+
+            var readModel: ProductInventoryReadModel = delegatingQueryHandler.handleQuery(ProductInventoryReadModelQuery(AGGREGATE_ID))
+
             readModel.inventoryMap[AGGREGATE_ID] == 13 }
     }
 

@@ -18,6 +18,7 @@ import org.springframework.modulith.Modulith
 @EntityScan(basePackages = ["de.nebulit","org.springframework.modulith.events.jpa"])
 class SpringApp {
     companion object {
+        @JvmStatic
         fun main(args: Array<String>) {
             runApplication<SpringApp>(*args)
         }
