@@ -3,6 +3,7 @@ package de.nebulit.domain
 import de.nebulit.common.AggregateRoot
 import de.nebulit.common.CommandException
 import de.nebulit.common.persistence.InternalEvent
+import de.nebulit.events.CartClearedEvent
 import de.nebulit.events.CartItemRemovedEvent
 import de.nebulit.events.CartSessionStartedEvent
 import de.nebulit.events.CarttemAddedEvent
@@ -42,6 +43,7 @@ class CartAggregate(
             when (it.value) {
                 is CarttemAddedEvent -> cartItems.add((it.value as CarttemAddedEvent).cartItemId)
                 is CartItemRemovedEvent -> cartItems.remove((it.value as CartItemRemovedEvent).cartItemId)
+                is CartClearedEvent -> cartItems.clear()
             }
         }
         return this
@@ -78,8 +80,8 @@ class CartAggregate(
 
     fun removeItem(cartItemId: UUID) {
         if (!cartItems.contains(cartItemId)) {
-                   throw CommandException("item not present")
-               }
+            throw CommandException("item not present")
+        }
         this.events.add(InternalEvent().apply {
             this.aggregateId = this@CartAggregate.aggregateId
             this.value = CartItemRemovedEvent(
@@ -88,6 +90,15 @@ class CartAggregate(
             )
         })
 
+    }
+
+    fun clear() {
+        this.events.add(InternalEvent().apply {
+            this.aggregateId = this@CartAggregate.aggregateId
+            this.value = CartClearedEvent(
+                this@CartAggregate.aggregateId,
+            )
+        })
     }
 
     companion object {
