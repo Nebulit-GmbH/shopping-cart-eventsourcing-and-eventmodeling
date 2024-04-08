@@ -114,6 +114,18 @@ class CartAggregate(
         })
     }
 
+    fun revokeProduct(productId: UUID) {
+        if (this.cartItems.cartItems.values.find { it.productId == productId } == null) {
+            //does not contain the product (anymore) ignore
+            return
+        }
+        this.events.add(InternalEvent().apply {
+            aggregateId = this@CartAggregate.aggregateId
+            value = ProductRevokedEvent(productId, this@CartAggregate.aggregateId)
+        })
+
+    }
+
     companion object {
         fun newSession(aggregateId: UUID): CartAggregate {
             val aggregate = CartAggregate(aggregateId)

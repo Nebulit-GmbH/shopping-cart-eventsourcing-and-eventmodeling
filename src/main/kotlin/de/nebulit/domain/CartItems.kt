@@ -5,8 +5,7 @@ import de.nebulit.common.Query
 import de.nebulit.common.QueryHandler
 import de.nebulit.common.ReadModel
 import de.nebulit.common.persistence.InternalEvent
-import de.nebulit.events.CartItem
-import de.nebulit.events.CarttemAddedEvent
+import de.nebulit.events.*
 import java.util.UUID
 import mu.KotlinLogging
 import org.springframework.stereotype.Component
@@ -50,6 +49,20 @@ class CartItems : ReadModel<CartItems> {
                             (it.value as CarttemAddedEvent).quantity,
                             (it.value as CarttemAddedEvent).productimage
                         )
+                }
+
+                is CartItemRemovedEvent -> {
+                    cartItems.remove((it.value as CartItemRemovedEvent).cartItemId)
+                }
+
+                is CartClearedEvent -> {
+                    cartItems.clear()
+                }
+
+                is ProductRevokedEvent -> {
+                    cartItems =
+                        cartItems.filter { item -> item.value.productId !== (it.value as ProductRevokedEvent).productId }
+                            .toMutableMap()
                 }
             }
         }
