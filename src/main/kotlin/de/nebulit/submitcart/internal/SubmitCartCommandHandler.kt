@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component
 import org.springframework.context.ApplicationEventPublisher
 import de.nebulit.domain.CartAggregate
 import mu.KotlinLogging
+import org.springframework.transaction.annotation.Transactional
 
 
 @Component
@@ -18,6 +19,7 @@ class SubmitCartCommandCommandHandler(
 
     var logger = KotlinLogging.logger {}
 
+    @Transactional
     override fun handle(inputCommand: Command): List<InternalEvent> {
         assert(inputCommand is SubmitCartCommand)
         val command = inputCommand as SubmitCartCommand

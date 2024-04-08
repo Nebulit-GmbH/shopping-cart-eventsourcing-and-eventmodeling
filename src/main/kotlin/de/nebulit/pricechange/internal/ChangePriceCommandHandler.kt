@@ -7,6 +7,7 @@ import org.springframework.context.ApplicationEventPublisher
 import de.nebulit.domain.ProductPricingAggregate
 
 import mu.KotlinLogging
+import org.springframework.transaction.annotation.Transactional
 
 
 @Component
@@ -17,6 +18,7 @@ class ChangePriceCommandCommandHandler(
 
     var logger = KotlinLogging.logger {}
 
+    @Transactional
     override fun handle(inputCommand: Command): List<InternalEvent> {
         assert(inputCommand is ChangePriceCommand)
         val command = inputCommand as ChangePriceCommand

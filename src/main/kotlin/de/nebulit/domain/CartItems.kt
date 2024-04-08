@@ -10,25 +10,6 @@ import java.util.UUID
 import mu.KotlinLogging
 import org.springframework.stereotype.Component
 
-class CartItemsReadModelQuery(var aggregateId: UUID) : Query<UUID> {
-    override fun toParam(): UUID {
-        return aggregateId
-    }
-}
-
-@Component
-class CartItemsReadModelHandler(
-    var aggregateService: AggregateService<CartAggregate>
-) : QueryHandler<UUID, CartItems> {
-    override fun handleQuery(query: Query<UUID>): CartItems {
-        return CartItems().applyEvents(this.aggregateService.findEventsByAggregateId(query.toParam()))
-    }
-
-    override fun <T> canHandle(query: Query<T>): Boolean {
-        return query is CartItemsReadModelQuery
-    }
-}
-
 class CartItems : ReadModel<CartItems> {
 
     var logger = KotlinLogging.logger {}

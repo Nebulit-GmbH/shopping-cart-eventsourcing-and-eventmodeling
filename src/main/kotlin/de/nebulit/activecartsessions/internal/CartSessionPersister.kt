@@ -1,6 +1,7 @@
 package de.nebulit.activecartsessions.internal
 
 import de.nebulit.events.*
+import org.springframework.modulith.events.ApplicationModuleListener
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional

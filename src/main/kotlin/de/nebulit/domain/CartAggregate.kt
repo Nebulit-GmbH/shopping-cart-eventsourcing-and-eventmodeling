@@ -58,8 +58,8 @@ class CartAggregate(
                 cartItem.price,
                 cartItem.quantity,
                 cartItem.productimage,
-                UUID.randomUUID(),
                 this@CartAggregate.aggregateId,
+                UUID.randomUUID(),
                 cartItem.productId
             )
 

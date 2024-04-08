@@ -7,6 +7,7 @@ import org.springframework.context.ApplicationEventPublisher
 import de.nebulit.domain.CartAggregate
 import java.util.UUID
 import mu.KotlinLogging
+import org.springframework.transaction.annotation.Transactional
 
 
 @Component
@@ -17,6 +18,7 @@ class ClearCartCommandCommandHandler(
 
     var logger = KotlinLogging.logger {}
 
+    @Transactional
     override fun handle(inputCommand: Command): List<InternalEvent> {
         assert(inputCommand is ClearCartCommand)
         val command = inputCommand as ClearCartCommand

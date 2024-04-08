@@ -7,6 +7,7 @@ import org.springframework.context.ApplicationEventPublisher
 import de.nebulit.domain.CartAggregate
 import de.nebulit.events.CartItem
 import mu.KotlinLogging
+import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 @Component
@@ -17,6 +18,7 @@ class AddItemCommandCommandHandler(
 
     var logger = KotlinLogging.logger {}
 
+    @Transactional
     override fun handle(inputCommand: Command): List<InternalEvent> {
         assert(inputCommand is AddItemCommand)
         val command = inputCommand as AddItemCommand
