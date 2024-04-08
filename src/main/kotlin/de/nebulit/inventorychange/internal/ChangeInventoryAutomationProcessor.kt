@@ -6,12 +6,10 @@ import de.nebulit.common.persistence.EventsEntityRepository
 import org.springframework.modulith.events.ApplicationModuleListener
 import org.springframework.stereotype.Component
 import mu.KotlinLogging
-import org.springframework.context.event.EventListener
-import java.util.*
 
 
 @Component
-class AutomationProcessor(
+class ChangeInventoryAutomationProcessor(
     val eventsEntityRepository: EventsEntityRepository,
     val commandHandler: DelegatingCommandHandler
 ) : Processor {

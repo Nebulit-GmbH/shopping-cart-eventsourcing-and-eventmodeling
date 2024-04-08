@@ -1,5 +1,6 @@
 package de.nebulit.viewcart.internal
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import de.nebulit.common.AggregateService
 import de.nebulit.common.Query
 import de.nebulit.common.QueryHandler
@@ -44,6 +45,7 @@ class CartItemsReadModelQueryHandler(var aggregateService: AggregateService<Cart
 
 class CartItemsReadModel : ReadModel<CartItemsReadModel> {
 
+    @JsonIgnore
     var logger = KotlinLogging.logger {}
     var cartItems = emptyMap<UUID, CartItem>()
     var totalPrice: Double = 0.0

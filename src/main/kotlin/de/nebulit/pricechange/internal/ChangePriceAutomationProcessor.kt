@@ -9,7 +9,7 @@ import mu.KotlinLogging
 
 
 @Component
-class AutomationProcessor(
+class ChangePriceAutomationProcessor(
     val eventsEntityRepository: EventsEntityRepository,
     val commandHandler: DelegatingCommandHandler
 ) : Processor {

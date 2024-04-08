@@ -14,7 +14,7 @@ import de.nebulit.events.PriceChangedEvent
 import java.util.*
 
 @Component
-class AutomationProcessor(
+class ActiveCartProductsWithProductsAutomationProcessor(
  val eventsEntityRepository: EventsEntityRepository,
  val delegatingQueryHandler:DelegatingQueryHandler,
  val commandHandler: DelegatingCommandHandler): Processor {

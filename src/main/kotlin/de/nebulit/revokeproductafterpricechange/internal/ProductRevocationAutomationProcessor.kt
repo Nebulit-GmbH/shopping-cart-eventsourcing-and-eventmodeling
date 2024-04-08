@@ -11,7 +11,7 @@ import mu.KotlinLogging
 import de.nebulit.events.ProductRevocationRequestedEvent
 
 @Component
-class AutomationProcessor(
+class ProductRevocationAutomationProcessor(
     val eventsEntityRepository: EventsEntityRepository,
     val delegatingQueryHandler: DelegatingQueryHandler,
     val commandHandler: DelegatingCommandHandler
