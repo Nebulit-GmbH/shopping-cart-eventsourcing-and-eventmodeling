@@ -1,5 +1,6 @@
-package de.nebulit.activecartsessions.internal
+package de.nebulit.activecartsessions
 
+import de.nebulit.activecartsessions.internal.CartSessionRepository
 import de.nebulit.common.Query
 import de.nebulit.common.QueryHandler
 import de.nebulit.common.ReadModel
@@ -15,19 +16,6 @@ class ActiveCartProductsWithProductsReadModelQuery(var changedProductId: UUID) :
 
 }
 
-@Component
-class ActiveCartProductsWithProductsReadModelQueryHandler(private var cartSessionRepository: CartSessionRepository) :
-    QueryHandler<UUID, ActiveCartProductsWithProductsReadModel> {
-    override fun handleQuery(query: Query<UUID>): ActiveCartProductsWithProductsReadModel {
-        val activeCartsContainingProduct = cartSessionRepository.findByProductId(listOf( query.toParam())).map { it.cartId }
-        return ActiveCartProductsWithProductsReadModel(query.toParam(), activeCartsContainingProduct)
-    }
-
-    override fun <T> canHandle(query: Query<T>): Boolean {
-        return query is ActiveCartProductsWithProductsReadModelQuery
-    }
-
-}
 
 class ActiveCartProductsWithProductsReadModel(var productId:UUID, var cartIds: List<UUID>) : ReadModel<ActiveCartProductsWithProductsReadModel> {
 

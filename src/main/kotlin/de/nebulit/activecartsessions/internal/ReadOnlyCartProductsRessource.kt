@@ -1,5 +1,7 @@
 package de.nebulit.activecartsessions.internal
 
+import de.nebulit.activecartsessions.ActiveCartProductsWithProductsReadModel
+import de.nebulit.activecartsessions.ActiveCartProductsWithProductsReadModelQuery
 import de.nebulit.common.persistence.EventsEntityRepository
 import de.nebulit.common.ReadModel
 import org.springframework.web.bind.annotation.GetMapping
@@ -21,7 +23,9 @@ class ActivecartsessionsRessource(
 
     @GetMapping("/activecartsessions")
     fun findInformation(@RequestParam aggregateId:UUID, @RequestParam productId:UUID):ReadModel<ActiveCartProductsWithProductsReadModel> {
-        return activeCartProductsWithProductsReadModelQueryHandler.handleQuery(ActiveCartProductsWithProductsReadModelQuery(productId))
+        return activeCartProductsWithProductsReadModelQueryHandler.handleQuery(
+            ActiveCartProductsWithProductsReadModelQuery(productId)
+        )
     }
 
 

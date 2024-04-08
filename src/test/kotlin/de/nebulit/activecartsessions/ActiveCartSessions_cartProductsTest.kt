@@ -8,8 +8,8 @@ import de.nebulit.common.persistence.EventsEntityRepository
 import de.nebulit.support.CartAggregateRepository
 
 import de.nebulit.events.CarttemAddedEvent;
-import de.nebulit.activecartsessions.internal.ActiveCartProductsWithProductsReadModel
-import de.nebulit.activecartsessions.internal.ActiveCartProductsWithProductsReadModelQuery
+import de.nebulit.activecartsessions.ActiveCartProductsWithProductsReadModel
+import de.nebulit.activecartsessions.ActiveCartProductsWithProductsReadModelQuery
 import de.nebulit.activecartsessions.internal.CartSessionRepository
 import de.nebulit.common.DelegatingQueryHandler
 import java.util.UUID

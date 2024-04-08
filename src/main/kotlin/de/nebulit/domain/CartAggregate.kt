@@ -5,6 +5,7 @@ import de.nebulit.common.CommandException
 import de.nebulit.common.persistence.InternalEvent
 import de.nebulit.events.*
 import jakarta.persistence.*
+import mu.KotlinLogging
 import org.hibernate.annotations.JdbcTypeCode
 import java.sql.Types
 import java.util.*
@@ -19,6 +20,9 @@ import kotlin.jvm.Transient
 class CartAggregate(
     @JdbcTypeCode(Types.VARCHAR) @Id override var aggregateId: UUID
 ) : AggregateRoot {
+
+    @jakarta.persistence.Transient
+    private val logger = KotlinLogging.logger {}
 
     override var version: Long? = 0
 
@@ -96,6 +100,17 @@ class CartAggregate(
                 totalPrice = totalPrice.totalPrice,
                 cartItems = cartItems.cartItems.values.toList()
             )
+        })
+    }
+
+    fun requestProductRevocationAfterPriceChange(productId: UUID) {
+        if (cartItems.cartItems.values.find { it.productId == productId } == null) {
+            logger.info { "Product no longer in cart. Ignoring." }
+            return
+        }
+        this.events.add(InternalEvent().apply {
+            aggregateId = this@CartAggregate.aggregateId
+            this.value = ProductRevocationRequestedEvent(productId, this@CartAggregate.aggregateId)
         })
     }
 
