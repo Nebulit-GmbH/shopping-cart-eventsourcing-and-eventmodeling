@@ -1,4 +1,6 @@
-## Nebulit GmbH - Eventmodeling Template
+## Softwaredesign mit Eventsourcing - Modellierung und Testing von eventsourcing basierten Systemen
+
+Video: https://youtu.be/2oPX5EF1jwE
 
 ### Build / Start
 
